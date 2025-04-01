@@ -1,30 +1,30 @@
-import {useParams, useNavigate} from 'react-router-dom';
-// import {useAuth} from '../../auth/AuthContext.js';
-// import useBranchData from '../../hooks/useBranchData.js';
-// import StockAlert from '../../components/data/StockAlert.js';
+ import {useParams, useNavigate} from 'react-router-dom';
+//  import {useAuth} from '../../auth/AuthContext.js';
+//  import useBranchData from '../../hooks/useBranchData.js';
+//  import StockAlert from '../../components/data/StockAlert.js';
 import './SalesAgentDasboard.css';
 
 
 export default function SalesAgentDashboard(){
     const {branch} = useParams();
     const navigate = useNavigate();
-//     const {user} = useAuth();
-//     const {stock, loading, error} = useBranchData(branch);
+    // const {user} = useAuth();
+    // const {stock, loading, error} = useBranchData(branch);
 
 
 // //verify agent has access to this branch
-// if(user.role !== 'sales_agent' || user.branch !== branch){
-//     return <div className ='Unauthorized'>Unauthorized access</div>;
+//  if(user.role !== 'sales_agent' || user.branch !== branch){
+//      return <div className ='Unauthorized'>Unauthorized access</div>;
 // }
-// if (loading) return <div className="loading">Loading dashboard...</div>;
-// if (error) return <div className="error">Error: {error}</div>;
+//  if (loading) return <div className="loading">Loading dashboard...</div>;
+//  if (error) return <div className="error">Error: {error}</div>;
 
 return (
     <div className ='sales-agent-dashboard'>
         <div className ='dashboard-container'>
             <div className='dashboard-header'>
                 <h1>{branch} Branch - Sales Agent Portal</h1>
-                <p>Welcome, {user.name}</p>
+                {/* <p>Welcome, {user.name}</p> */}
             </div>
 
             <div className ='action-buttons'>
@@ -53,7 +53,7 @@ return (
 
         <div className="stock-card">
           <h2>Current Stock</h2>
-          <StockAlert stock={stock} threshold={10} />
+          {/* <StockAlert stock={stock} threshold={10} /> */}
         </div>
 
         <div className="activity-card">
