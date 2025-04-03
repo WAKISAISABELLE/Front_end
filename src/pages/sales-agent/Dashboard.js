@@ -9,6 +9,7 @@ export default function SalesAgentDashboard(){
     const {branch} = useParams();
     const navigate = useNavigate();
     // const {user} = useAuth();
+    // if (!user) return <div className='Unauthorized'>Please log in</div>;
     // const {stock, loading, error} = useBranchData(branch);
 
 
@@ -32,7 +33,7 @@ return (
                 title = 'Record New Sale'
                 description ='cash or credit transaction'
                 icon ='💰'
-                onClick={()=> navigate (`/sales-agent/${branch}new-sale`)}
+                onClick={()=> navigate (`/sales-agent/${branch}/new-sale`)}
                 color ='green'
             />
             <ActionButton 
