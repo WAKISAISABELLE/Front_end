@@ -7,6 +7,7 @@ import Login from './auth/login.js';
 import SalesForm from'./pages/sales-agent/Sales.js';
 import ProcurementForm from './pages/sales-agent/Procurement.js';
 import CreditSales from './pages/sales-agent/CreditSales';
+import CEODashboard from './pages/ceo/Dashboard.js';
 
 function App() {
   // const [user, setUser] =useState(null);
@@ -14,6 +15,7 @@ function App() {
     // <AuthProvider value={{user,setUser}}>
     <BrowserRouter>
       <Routes>
+        <Route path="/ceo/dashboard" element={<CEODashboard />} />
         <Route path="/sales-agent/:branch/dashboard" element={<SalesAgentDashboard/>} />
         <Route path="/sales-agent/:branch/new-sale" element={<SalesForm/>} />
         <Route path="/sales-agent/:branch/procurement" element={<ProcurementForm/>} />

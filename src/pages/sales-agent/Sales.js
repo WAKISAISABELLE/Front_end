@@ -22,7 +22,7 @@ const salesSchema = Yup.object().shape({
     })
   });
  export default function SalesForm(){
-    const {branch} =useParams();
+     const {branch} =useParams();
     // const {user} =useAuth();
     const navigate = useNavigate();
 

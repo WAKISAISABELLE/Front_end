@@ -84,7 +84,7 @@ export default function ProcurementForm(){
                               <option value="soybeans">Soybeans</option>
                               <option value='groundnuts'>Groundnuts</option>
                             </Field>
-                            <ErrorMessage name='produceName' componenet='div' className='error-message'/>
+                            <ErrorMessage name='produceName' component='div' className='error-message'/>
                             </div>
 
                             
