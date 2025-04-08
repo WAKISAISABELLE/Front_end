@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate,} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-// import {useAuth} from './AuthContext';
 import './login.css';
 
 export default function Login() {
@@ -101,19 +100,6 @@ export default function Login() {
             </div>
 
             <button type="submit" className="login-button">Login</button>
-            
-            <div className="social-login">
-              <p>Or continue with</p>
-              <div className="social-buttons">
-                <button type="button" className="social-button google">
-                  Google Account
-                </button>
-              </div>
-            </div>
-
-            <div className="register-link">
-              Don't have an account? <Link to="/register">Register</Link>
-            </div>
           </form>
         </div>
       </div>

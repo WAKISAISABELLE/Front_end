@@ -40,7 +40,7 @@
   /* Image Section with Text Card */
   .login-image-container {
     position: relative;
-    background-image:url(../../public/log.jpg) ;
+    background-image:url(../../public/a1.jpg);
     background-size: cover;
     display: flex;
     align-items: center;
@@ -99,7 +99,8 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    background-color: rgba(27, 22, 22, 0.15);
+    background-color: black;
+    background-size: cover;
     height: 100vh;
     overflow-y: auto;
   }
@@ -108,8 +109,10 @@
     width: 100%;
     max-width: 400px;
     padding: 2rem;
-    border: 1px solid black;
-    background:rgba(27, 22, 22, 0.15) ;
+    border: 2px solid black;
+    background: white;
+    background-size: cover;
+    height: auto;
     border-radius: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -127,8 +130,9 @@
   }
   
   .login-subheader {
-    color: black;
-    font-size: 0.95rem;
+    color:black;
+    font-size: 1rem;
+    font-weight: 300;
   }
   
   /* Form Elements */
@@ -147,22 +151,23 @@
   .input-field {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
+    border: 5px solid black;
+    border-radius: 10px;
     font-size: 0.95rem;
     /* transition: var(--transition); */
     background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
   }
   
   .input-field:focus {
-    border-color: var(--primary-color);
+    /* border-color: var(--primary-color); */
     background-color: white;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
   }
   
   .error {
-    color: purple;
+    color:white;
     font-size: 0.8rem;
     margin-top: 0.25rem;
     display: block;
@@ -173,8 +178,8 @@
   .login-button {
     width: 100%;
     padding: 14px;
-    background: black;
-    color: white;
+    background: white;
+    color:black;
     border: none;
     border-radius: 10px;
     font-size: 1rem;
