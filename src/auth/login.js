@@ -38,7 +38,7 @@ export default function Login() {
         setError("Unknown user role")
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Invalid email or password")
+      setError(error.message || "Invalid email or password")
     } finally {
       setIsLoading(false)
     }
