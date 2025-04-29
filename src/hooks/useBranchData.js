@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export default function useBranchData(branch) {
+export default function useBranchData(branchId) {
   const [stock, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,24 +10,19 @@ export default function useBranchData(branch) {
     const fetchStock = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/stock?branch=${branch}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        if (!response.ok) throw new Error('Failed to fetch stock');
-        const data = await response.json();
-        setStock(data);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/stock?branchId=${branchId}`);
+        setStock(response.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.message || 'Failed to fetch stock');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStock();
-  }, [branch]);
+    if (branchId) {
+      fetchStock();
+    }
+  }, [branchId]);
 
   return { stock, loading, error };
 }

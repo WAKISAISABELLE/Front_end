@@ -1,147 +1,101 @@
 
-// import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// const AuthContext = createContext();
+import { createContext, useState, useEffect, useContext } from "react"
+import axios from "axios"
 
-// export function AuthProvider({ children }) {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
+// Create the context
+const AuthContext = createContext(null)
 
-//   // Check for token on app load and fetch user data
-//   useEffect(() => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       // Simulate fetching user data from an API
-//       // In a real app, you'd make an API call to verify the token and get user data
-//       const fetchUser = async () => {
-//         try {
-//           // Mock API call
-//           const mockUser = {
-//             _id: '12345',
-//             name: 'Test User',
-//             role: 'sales_agent',
-//             branch: 'main',
-//           };
-//           setUser(mockUser);
-//         } catch (error) {
-//           console.error('Failed to fetch user:', error);
-//           localStorage.removeItem('token');
-//         } finally {
-//           setLoading(false);
-//         }
-//       };
-//       fetchUser();
-//     } else {
-//       setLoading(false);
-//     }
-//   }, []);
+// AuthProvider component that wraps your app and makes auth available
+export function AuthProvider({ children }) {
+  const [token, setToken] = useState(localStorage.getItem("token") || null)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null)
+  const [loading, setLoading] = useState(true)
 
-//   const login = async (email, password) => {
-//     try {
-//       // Simulate API call to login
-//       const response = await fetch('/api/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ email, password }),
-//       });
+  useEffect(() => {
+    // Set up axios defaults
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
-//       if (!response.ok) throw new Error('Login failed');
-//       const data = await response.json();
-//       localStorage.setItem('token', data.token);
-//       setUser(data.user);
-//     } catch (error) {
-//       console.error('Login error:', error);
-//       throw error;
-//     }
-//   };
+      // Verify token is still valid
+      const verifyToken = async () => {
+        try {
+          // We'll use the user's own data endpoint to verify the token
+          if (user && user.id) {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user.id}`)
+            setUser(response.data)
+          }
+          setLoading(false)
+        } catch (error) {
+          console.error("Token verification failed:", error)
+          logout()
+          setLoading(false)
+        }
+      }
 
-//   const logout = () => {
-//     localStorage.removeItem('token');
-//     setUser(null);
-//   };
+      verifyToken()
+    } else {
+      delete axios.defaults.headers.common["Authorization"]
+      setLoading(false)
+    }
+  }, [token, user])
 
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
+  // Save token and user to localStorage when they change
+  useEffect(() => {
+    if (token && user) {
+      localStorage.setItem("token", token)
+      localStorage.setItem("user", JSON.stringify(user))
+    } else {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+    }
+  }, [token, user])
 
-//   return (
-//     <AuthContext.Provider value={{ user, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// }
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+        email,
+        password,
+      })
 
-// export function useAuth() {
-//   return useContext(AuthContext);
-// }
+      const { token: newToken, user: userData } = response.data
 
-// import React, { createContext, useState, useEffect, useContext } from 'react';
-// import axios from 'axios';
+      setToken(newToken)
+      setUser(userData)
 
-// const AuthContext = createContext();
+      return userData
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message)
+      throw error
+    }
+  }
 
-// export function AuthProvider({ children }) {
-//   const [token, setToken] = useState(localStorage.getItem('token') || null);
-//   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
+  const logout = () => {
+    setToken(null)
+    setUser(null)
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+  }
 
-//   useEffect(() => {
-//     console.log('AuthContext - token:', token, 'user:', user);
-//     if (token && user) {
-//       localStorage.setItem('token', token);
-//       localStorage.setItem('user', JSON.stringify(user));
-//       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-//       console.log('AuthContext - set axios header:', `Bearer ${token}`);
-//     } else {
-//       localStorage.removeItem('token');
-//       localStorage.removeItem('user');
-//       delete axios.defaults.headers.common['Authorization'];
-//       console.log('AuthContext - cleared axios header');
-//     }
-//   }, [token, user]);
+  // The value that will be available to consumers of this context
+  const value = {
+    token,
+    user,
+    login,
+    logout,
+    loading,
+  }
 
-//   const login = async (username, password) => {
-//     try {
-//       console.log('Attempting login:', { username });
-//       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, {
-//         username,
-//         password
-//       });
-//       const { token, user } = response.data;
-//       if (!user.role || !user.branch) {
-//         throw new Error('Invalid user data from server');
-//       }
-//       setToken(token);
-//       setUser(user);
-//       console.log('Login success - token:', token, 'user:', user);
-//       return true;
-//     } catch (error) {
-//       console.error('Login failed:', error.response?.data || error.message);
-//       throw error;
-//     }
-//   };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
 
-//   const logout = () => {
-//     setToken(null);
-//     setUser(null);
-//     localStorage.clear();
-//     console.log('Logged out and cleared local storage');
-//   };
+// Custom hook to use the auth context
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider")
+  }
+  return context
+}
 
-//   return (
-//     <AuthContext.Provider value={{ token, user, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// }
-
-// export function useAuth() {
-//   const context = useContext(AuthContext);
-//   if (!context) {
-//     throw new Error('useAuth must be used within an AuthProvider');
-//   }
-//   return context;
-// }
-
-// export default AuthContext;
+export default AuthContext
